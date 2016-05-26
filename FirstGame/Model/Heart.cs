@@ -6,19 +6,12 @@ namespace FirstGame.Model
 	public class Heart
 	{
 		public Texture2D HeartTexture;
-
 		public Vector2 Position;
-
 		public bool Active;
-
 		public int Health;
-
 		Viewport viewport;
-
 		public int Damage;
-
 		public int Value;
-
 		public int Width
 		{
 			get { return HeartTexture.Width; } 
@@ -41,7 +34,7 @@ namespace FirstGame.Model
 
 			Health = 2;
 
-			Damage = -30;
+			Damage = 30;
 
 			heartMoveSpeed = 12f;
 
