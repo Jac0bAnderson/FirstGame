@@ -53,9 +53,9 @@
     <Compile Include="Model\Enemy.cs" />
     <Compile Include="View\Animation.cs" />
     <Compile Include="View\ParallaxingBackground.cs" />
-    <Compile Include="Model\Heart.cs" />
     <Compile Include="Model\Projectile.cs" />
     <Compile Include="Model\Plasma.cs" />
+    <Compile Include="Model\Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Icon.png" />

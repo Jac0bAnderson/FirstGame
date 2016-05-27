@@ -48,17 +48,6 @@ namespace FirstGame.Controller
 		// A random number generator
 		Random random;
 
-		// Hearts
-		Texture2D heartTexture;
-		List<Heart> hearts;
-
-		// The rate at which the enemies appear
-		TimeSpan heartSpawnTime;
-		TimeSpan previousHeartSpawnTime;
-
-		// A random number generator
-		Random randomHeart;
-
 		Texture2D projectileTexture;
 		List<Projectile> projectiles;
 
@@ -126,17 +115,6 @@ namespace FirstGame.Controller
 			// Initialize our random number generator
 			random = new Random();
 
-			// Initialize the hearts list
-			hearts = new List<Heart> ();
-
-			// Set the time keepers to zero
-			previousHeartSpawnTime = TimeSpan.Zero;
-
-			// Used to determine how fast enemy respawns
-			heartSpawnTime = TimeSpan.FromSeconds(30f);
-
-			// Initialize our random number generator
-			randomHeart = new Random();
 
 			projectiles = new List<Projectile>();
 			plasmas = new List<Plasma> ();
@@ -176,7 +154,6 @@ namespace FirstGame.Controller
 			bgLayer2.Initialize(Content, "Texture/bgLayer2", GraphicsDevice.Viewport.Width, -2);
 
 			enemyTexture = Content.Load<Texture2D>("Animation/mineAnimation");
-			heartTexture = Content.Load<Texture2D>("Texture/heart");
 
 			projectileTexture = Content.Load<Texture2D>("Texture/laser");
 			plasmaTexture = Content.Load<Texture2D> ("Texture/plasmaSmall");
@@ -231,7 +208,7 @@ namespace FirstGame.Controller
 			// Update the enemies
 			UpdateEnemies(gameTime);
 
-			UpdateHearts (gameTime);
+
 
 			// Update the collision
 			UpdateCollision();
@@ -337,10 +314,7 @@ namespace FirstGame.Controller
 				enemies[i].Draw(spriteBatch);
 			}
 
-			for (int i = 0; i < hearts.Count; i++)
-			{
-				hearts[i].Draw(spriteBatch);
-			}
+
 
 			// Draw the Projectiles
 			for (int i = 0; i < projectiles.Count; i++)
@@ -430,46 +404,7 @@ namespace FirstGame.Controller
 			}
 		}
 
-		private void AddHeart()
-		{ 
-			Heart heart = new Heart (); 
 
-			Vector2 position = new Vector2(GraphicsDevice.Viewport.Width + heartTexture.Width / 2, randomHeart.Next(0, GraphicsDevice.Viewport.Height));
-
-			heart.Initialize(heartTexture, position); 
-
-			hearts.Add(heart);
-		}
-
-		private void UpdateHearts(GameTime gameTime)
-		{
-			// Spawn a new heart every 12 seconds
-			if (gameTime.TotalGameTime - previousHeartSpawnTime > heartSpawnTime) 
-			{
-				previousHeartSpawnTime = gameTime.TotalGameTime;
-
-				// Add an Heart
-				AddHeart();
-			}
-
-			// Update the hearts
-			for (int i = hearts.Count - 1; i >= 0; i--) 
-			{
-				hearts[i].Update(gameTime);
-
-				if (hearts[i].Active == false)
-				{
-					// If not active and health <= 0
-					if (hearts[i].Health <= 0)
-					{
-						//Add to the player's score
-						score += hearts[i].Value;
-					}
-
-					hearts.RemoveAt(i);
-				} 
-			}
-		}
 
 		private void UpdateExplosions(GameTime gameTime)
 		{
@@ -519,27 +454,7 @@ namespace FirstGame.Controller
 				}
 			}
 
-			for (int i = 0; i < hearts.Count; i++)
-			{
-				rectangle2 = new Rectangle((int) hearts[i].Position.X, (int)hearts[i].Position.Y, hearts[i].Width, hearts[i].Height);
 
-				// Determine if the two objects collided with each
-				// other
-				if(rectangle1.Intersects(rectangle2))
-				{
-					// Subtract the health from the player based on
-					// the enemy damage
-					player.Health -= hearts[i].Damage;
-
-					// Since the enemy collided with the player
-					// destroy it
-					hearts[i].Health = 0;
-
-					// If the player health is less than zero we died
-					if (player.Health <= 0)
-						player.Active = false; 
-				}
-			}
 
 			// Projectile vs Enemy Collision
 			for (int i = 0; i < projectiles.Count; i++)
